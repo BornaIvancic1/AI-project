@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+python-multipart
+easyocr
+pymupdf
+google-genai
+python-dotenv
+requests
+streamlit
