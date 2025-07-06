@@ -2,8 +2,8 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List
 from app.services.qa_service import answer_question
-from app.services.ner_service import extract_entities  # Import your NER service
-from app.storage.storage_service import get_all_texts
+from app.services.ner_service import extract_entities
+from app.services.rag_service import retrieve_relevant_chunks
 
 router = APIRouter()
 
@@ -23,10 +23,10 @@ class AskResponse(BaseModel):
 
 @router.post("/ask", response_model=AskResponse)
 async def ask(request: AskRequest):
-    texts = get_all_texts()
-    if not texts:
+    relevant_chunks = retrieve_relevant_chunks(request.question, k=3)
+    if not relevant_chunks:
         raise HTTPException(status_code=400, detail="No documents uploaded yet.")
-    context = "\n".join(texts)
+    context = "\n".join(relevant_chunks)
     answer = answer_question(request.question, context)
     entities_raw = extract_entities(answer)
     entities = [
