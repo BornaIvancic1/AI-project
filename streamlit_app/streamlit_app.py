@@ -11,7 +11,7 @@ def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-local_css("streamlit_app/style.css")
+local_css("style.css")
 
 col1, col2, col3 = st.columns([1,2,1])
 with col2:
@@ -50,4 +50,3 @@ with col2:
                 st.error("Failed to get answer. Make sure you have uploaded documents first.")
 
 st.markdown("---")
-st.caption("Powered by FastAPI, Streamlit, EasyOCR, PyMuPDF, and Transformers.")

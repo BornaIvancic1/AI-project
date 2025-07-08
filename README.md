@@ -10,7 +10,7 @@ AI Question Answering: Answers user questions about uploaded documents using Gem
 
 Dockerized: Fully containerized for easy deployment.
 
-Test Documents: Includes sample PDFs/images for demo and grading.
+Test Documents: Includes sample PDFs/images for demo.
 
 (Optional) NER: Highlights named entities in answers.
 
@@ -20,14 +20,7 @@ Test Documents: Includes sample PDFs/images for demo and grading.
 Manual Installation
 Clone the repository:
 
-bash
-git clone https://github.com/<YOUR_USERNAME>/<YOUR_REPO>.git
-cd <YOUR_REPO>
-Create and activate a virtual environment:
 
-bash
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 Install dependencies:
 
 bash
@@ -104,6 +97,6 @@ Sample PDFs and images are included in the test_docs/ folder for demonstration a
 To run the Streamlit demo:
 
 bash
-streamlit run streamlit_app/streamlit_app.py
+streamlit run streamlit_app.py
 Then open http://localhost:8501.
 
