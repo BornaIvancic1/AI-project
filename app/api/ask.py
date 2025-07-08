@@ -26,7 +26,8 @@ async def ask(request: AskRequest):
     relevant_chunks = retrieve_relevant_chunks(request.question, k=3)
     if not relevant_chunks:
         raise HTTPException(status_code=400, detail="No documents uploaded yet.")
-    context = "\n".join(relevant_chunks)
+    # FIX: Join only the text fields
+    context = "\n".join(chunk["text"] for chunk in relevant_chunks)
     answer = answer_question(request.question, context)
     entities_raw = extract_entities(answer)
     entities = [

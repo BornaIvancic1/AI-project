@@ -1,5 +1,6 @@
 import os
 from redisvl.extensions.cache.embeddings import EmbeddingsCache
+import numpy as np
 
 # Configuration
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
@@ -14,10 +15,8 @@ cache = EmbeddingsCache(
 )
 
 def store_embedding(text, model_name, embedding, metadata=None, ttl=None):
-    """
-    Store an embedding in the cache.
-    Returns the cache key.
-    """
+    if not (isinstance(embedding, list) or isinstance(embedding, np.ndarray)):
+        raise ValueError(f"Embedding must be a list or numpy array, got {type(embedding)}")
     return cache.set(
         text=text,
         model_name=model_name,
@@ -25,6 +24,7 @@ def store_embedding(text, model_name, embedding, metadata=None, ttl=None):
         metadata=metadata,
         ttl=ttl
     )
+
 
 def get_embedding(text, model_name):
     """

@@ -11,29 +11,41 @@ EMBEDDING_MODEL_NAME = 'all-MiniLM-L6-v2'
 embedder = SentenceTransformer(EMBEDDING_MODEL_NAME)
 dimension = embedder.get_sentence_embedding_dimension()
 index = faiss.IndexFlatL2(dimension)
-all_chunks = []
+all_chunks = []  # Each item: {"filename": ..., "text": ...}
 
 def chunk_text(text, chunk_size=500):
-    # Simple chunking by character count
+    """Splits text into chunks of specified character length."""
     return [text[i:i+chunk_size] for i in range(0, len(text), chunk_size)]
 
-def add_document(text):
+def add_document(text, filename=None):
+    if not isinstance(text, str):
+        raise ValueError(f"add_document expected a string, got {type(text)}: {text}")
     chunks = chunk_text(text)
     if not chunks:
         return
     embeddings = []
     for chunk in chunks:
-        if embedding_exists(chunk, EMBEDDING_MODEL_NAME):
-            embedding = get_embedding(chunk, EMBEDDING_MODEL_NAME)
+        # If chunk is a dict (with filename and text), extract just the text for embedding
+        if isinstance(chunk, dict):
+            text_for_embedding = chunk["text"]
+            fname = chunk.get("filename")
         else:
-            embedding = embedder.encode([chunk])[0]
-            store_embedding(chunk, EMBEDDING_MODEL_NAME, embedding)
+            text_for_embedding = chunk
+            fname = filename  # fallback
+
+        # Only pass the text to the embedder
+        embedding = embedder.encode([text_for_embedding])[0]
         embeddings.append(embedding)
+        # Store filename and text for debugging/traceability
+        all_chunks.append({"filename": fname, "text": text_for_embedding})
     embeddings = np.asarray(embeddings).astype('float32')
     index.add(embeddings)
-    all_chunks.extend(chunks)
 
 def retrieve_relevant_chunks(query, k=3):
+    """
+    Retrieves the k most relevant chunks for the query using FAISS.
+    Returns a list of chunk dicts: {"filename": ..., "text": ...}
+    """
     if len(all_chunks) == 0 or index.ntotal == 0:
         return []
     query_embedding = embedder.encode([query])
