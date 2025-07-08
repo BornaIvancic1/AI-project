@@ -1,7 +1,12 @@
 import os
 
-# Adjust this path to your actual upload directory
-UPLOAD_DIR = r"C:\Projekti\AI-project\app\uploaded_docs"
+current_dir = os.path.abspath(__file__)
+while not os.path.isdir(os.path.join(current_dir, 'app')):
+    current_dir = os.path.dirname(current_dir)
+PROJECT_ROOT = current_dir
+
+UPLOAD_DIR = os.path.join(PROJECT_ROOT, "app", "uploaded_docs")
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # Import your add_document function from RAG service
 from app.services.rag_service import add_document

@@ -3,7 +3,13 @@ from pydantic import BaseModel
 from typing import List
 import os
 
-UPLOAD_DIR = r"C:\Projekti\AI-project\app\uploaded_docs"
+current_dir = os.path.abspath(__file__)
+while not os.path.isdir(os.path.join(current_dir, 'app')):
+    current_dir = os.path.dirname(current_dir)
+PROJECT_ROOT = current_dir
+
+UPLOAD_DIR = os.path.join(PROJECT_ROOT, "app", "uploaded_docs")
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 router = APIRouter()
 
