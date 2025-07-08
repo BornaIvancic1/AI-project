@@ -1,0 +1,25 @@
+Project Meeting Notes
+
+Date: July 8, 2025
+
+Attendees:
+- Alice Johnson
+- Bob Smith
+- Carol Lee
+
+Agenda:
+1. Review project milestones
+2. Discuss upcoming deadlines
+3. Assign tasks for next sprint
+
+Key Points:
+- The backend API is 80% complete.
+- Frontend integration will start next week.
+- All team members should submit status updates by Friday.
+
+Action Items:
+- Alice: Finalize API documentation.
+- Bob: Set up CI/CD pipeline.
+- Carol: Prepare demo for client presentation.
+
+End of notes.
